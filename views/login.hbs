@@ -13,14 +13,20 @@
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <button type="submit">Login</button>
+            <button onclick="goBack()">Voltar</button>
         </form>
         {{#if errors}}
         <div>
             {{#each errors}}
             <span class="erro">{{msg}}</span>
             {{/each}}
-</div>
+        </div>
         {{/if}}
     </container>
 </body>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </html>

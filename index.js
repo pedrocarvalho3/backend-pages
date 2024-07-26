@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const { body, validationResult } = require("express-validator");
 const cookieParser = require("cookie-parser");
+const fs = require("fs");
 
 const app = express();
 
@@ -34,7 +35,20 @@ function authVerify(req, res, next) {
 }
 
 app.get("/", (req, res) => {
-  res.send("Página inicial");
+  fs.readdir(path.join(__dirname, "pages"), (err, files) => {
+    if (err) {
+      return res.status(500).send("Erro ao ler as páginas");
+    }
+
+    const pages = files.map((file) => {
+      const name = path.basename(file, ".txt");
+      return { url: `/pages/${name}`, name };
+    });
+
+    const content =
+      pages.length > 0 ? "Páginas criadas:" : "Nenhuma página criada";
+    res.render("home", { pages, content });
+  });
 });
 
 app.get("/login", (req, res) => {
@@ -60,7 +74,6 @@ app.post(
     ) {
       req.session.loggedIn = true;
       res.cookie("loggedIn", true, { maxAge: 60000 });
-      console.log("Usuário logado");
       return res.redirect("/admin");
     } else {
       return res.status(401).send("Usuário ou senha incorretos");
@@ -76,6 +89,59 @@ app.get("/logout", (req, res) => {
 
 app.get("/admin", authVerify, (req, res) => {
   res.render("admin");
+});
+
+app.get("/admin/create", authVerify, (req, res) => {
+  res.render("create");
+});
+
+app.post(
+  "/admin/create",
+  authVerify,
+  [
+    body("url")
+      .trim()
+      .notEmpty()
+      .withMessage("É necessário preencher o campo de URL"),
+    body("content")
+      .trim()
+      .notEmpty()
+      .withMessage("É necessário preencher o campo de Conteúdo"),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("create", { errors: errors.array() });
+    }
+
+    const { url, content } = req.body;
+    console.log(url, content);
+    const sanitizedUrl = url.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+    const pagePath = path.join(__dirname, "pages", `${sanitizedUrl}.txt`);
+
+    fs.writeFile(pagePath, content, (err) => {
+      if (err) {
+        return res.status(500).send("Erro na criação da página");
+      }
+      res.redirect("/admin");
+    });
+  }
+);
+
+app.get("/pages/:page", (req, res) => {
+  const { page } = req.params;
+  const pagePath = path.join(
+    __dirname,
+    "pages",
+    `${page.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.txt`
+  );
+
+  fs.readFile(pagePath, "utf-8", (err, data) => {
+    if (err) {
+      return res.status(404).send("Página não encontrada");
+    }
+    res.render("page", { content: data, page: pagePath });
+  });
 });
 
 const port = process.env.PORT || 3000;

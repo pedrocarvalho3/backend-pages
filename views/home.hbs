@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>Home</title>
+</head>
+<body>
+    <container>
+        <h1>Página Inicial</h1>
+        <nav>
+            <ul>
+                <h2>{{content}}</h2>
+                {{#each pages}}
+                <li><a href="{{this.url}}">{{this.name}}</a> <i class="fas fa-edit"></i></li>
+                {{/each}}
+                <button onclick="logIn()">Logar</button>
+            </ul>
+            
+        </nav>
+        
+    </container>
+</body>
+<script>
+    function logIn() {
+        window.location.href = '/login';
+    }
+</script>
+</html>

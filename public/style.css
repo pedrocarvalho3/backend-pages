@@ -49,7 +49,8 @@ button {
   color: #fff;
   cursor: pointer;
   height: 2.5rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .erro {
@@ -59,7 +60,6 @@ button {
 
 nav {
   display: flex;
-  justify-content: center;
   gap: 1rem;
 }
 
@@ -68,6 +68,18 @@ ul {
   gap: 1rem;
   flex-direction: column;
   list-style: none;
+}
+
+ol {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  font-size: 1.5rem;
+}
+
+li {
+  display: flex;
+  font-size: 1.2rem;
 }
 
 a {

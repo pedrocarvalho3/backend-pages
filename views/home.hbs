@@ -14,13 +14,19 @@
             <ul>
                 <h2>{{content}}</h2>
                 {{#each pages}}
-                <li><a href="{{this.url}}">{{this.name}}</a> <i class="fas fa-edit"></i></li>
+                <li class="page-list">
+                    <a href="{{this.url}}" class="item">{{this.name}}</a>
+                    <a href="{{this.url}}/edit"><i class="fas fa-edit"></i></a>
+                    <form action="/pages/{{this.name}}/delete" method="post" style="display:inline;">
+                        <button type="submit" style="background:none;border:none;padding:0;color:inherit;cursor:pointer;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </li>
                 {{/each}}
                 <button onclick="logIn()">Logar</button>
             </ul>
-            
         </nav>
-        
     </container>
 </body>
 <script>

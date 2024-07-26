@@ -144,6 +144,74 @@ app.get("/pages/:page", (req, res) => {
   });
 });
 
+app.get("/pages/:page/edit", authVerify, (req, res) => {
+  const { page } = req.params;
+  const pagePath = path.join(
+    __dirname,
+    "pages",
+    `${page.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.txt`
+  );
+
+  fs.readFile(pagePath, "utf-8", (err, data) => {
+    if (err) {
+      return res.status(404).send("Página não encontrada");
+    }
+    const url = page.replace(/_/g, "-");
+    res.render("edit", { content: data, url: url });
+  });
+});
+
+app.post(
+  "/pages/:page/edit",
+  authVerify,
+  [
+    body("content")
+      .trim()
+      .notEmpty()
+      .withMessage("É necessário preencher o campo de Conteúdo"),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("edit", {
+        errors: errors.array(),
+        content: req.body.content,
+        url: req.params.page.replace(/_/g, "-"),
+      });
+    }
+
+    const { content } = req.body;
+    const oldPagePath = path.join(
+      __dirname,
+      "pages",
+      `${req.params.page.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.txt`
+    );
+
+    fs.writeFile(oldPagePath, content, (err) => {
+      if (err) {
+        return res.status(500).send("Erro ao editar a página");
+      }
+      res.redirect("/admin");
+    });
+  }
+);
+
+app.post("/pages/:page/delete", authVerify, (req, res) => {
+  const { page } = req.params;
+  const pagePath = path.join(
+    __dirname,
+    "pages",
+    `${page.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.txt`
+  );
+
+  fs.unlink(pagePath, (err) => {
+    if (err) {
+      return res.status(500).send("Erro ao excluir a página");
+    }
+    res.redirect("/admin");
+  });
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);

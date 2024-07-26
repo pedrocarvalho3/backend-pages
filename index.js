@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const path = require("path");
+const { body, validationResult } = require("express-validator");
 
 const app = express();
 
@@ -29,20 +30,30 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  if (
-    username === process.env.ADMIN_USERNAME &&
-    password === process.env.ADMIN_PASSWORD
-  ) {
-    req.session.loggedIn = true;
-    console.log("Usuário logado");
-    return res.redirect("/admin");
-  } else {
-    res.redirect("/login");
-    return res.send("Usuário ou senha incorretos");
+app.post(
+  "/login",
+  [
+    body("username").trim().notEmpty().withMessage("Username é obrigatório"),
+    body("password").trim().notEmpty().withMessage("Password é obrigatório"),
+  ],
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("login", { errors: errors.array() });
+    }
+
+    const { username, password } = req.body;
+    if (
+      username === process.env.ADMIN_USERNAME &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
+      req.session.loggedIn = true;
+      return res.redirect("/admin");
+    } else {
+      res.render("login", { errors: [{ msg: "Usuário ou senha inválidos" }] });
+    }
   }
-});
+);
 
 const port = process.env.PORT;
 app.listen(port, () => {

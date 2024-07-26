@@ -51,3 +51,8 @@ button {
   height: 2.5rem;
   font-size: 1rem;
 }
+
+.erro {
+  font-size: 1.5rem;
+  color: red;
+}

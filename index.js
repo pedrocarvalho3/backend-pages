@@ -39,8 +39,8 @@ app.post("/login", (req, res) => {
     console.log("Usuário logado");
     return res.redirect("/admin");
   } else {
-    console.log("erro");
     res.redirect("/login");
+    return res.send("Usuário ou senha incorretos");
   }
 });
 

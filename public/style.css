@@ -56,3 +56,35 @@ button {
   font-size: 1.5rem;
   color: red;
 }
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+ul {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #333;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  width: 32rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.5rem;
+
+  &:hover {
+    background-color: #333;
+    color: #fff;
+    transition: 0.5s ease-in-out;
+  }
+}

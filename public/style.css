@@ -20,16 +20,12 @@ container {
   height: 100vh;
 }
 
-h1 {
-  font-size: 4rem;
-  font-weight: 700;
-  color: #333;
-}
-
 .title {
   display: flex;
   align-items: center;
   gap: 1rem;
+  font-size: 2.5rem;
+  font-weight: 700;
 }
 
 form {
@@ -76,18 +72,6 @@ ul {
   list-style: none;
 }
 
-ol {
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-  font-size: 1.5rem;
-}
-
-li {
-  display: flex;
-  font-size: 1.2rem;
-}
-
 .item {
   text-decoration: none;
   color: #333;
@@ -118,5 +102,24 @@ li {
     font-size: 2rem;
     cursor: pointer;
     color: #333;
+  }
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  padding: 1rem;
+  height: 50vh;
+  width: 50%;
+  font-size: 180%;
+
+  ol {
+    margin-left: 2rem;
+  }
+
+  ul {
+    margin-left: 2rem;
   }
 }

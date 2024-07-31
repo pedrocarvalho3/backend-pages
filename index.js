@@ -141,7 +141,10 @@ app.get("/pages/:page", (req, res) => {
     if (err) {
       return res.status(404).send("Página não encontrada");
     }
-    res.render("page", { content: data, page: pagePath });
+    const pageName = page.replace(/_/g, "-").replace(/\b\w/g, function (char) {
+      return char.toUpperCase();
+    });
+    res.render("page", { content: data, page: pageName });
   });
 });
 

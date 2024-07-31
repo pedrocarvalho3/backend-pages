@@ -12,6 +12,7 @@ dotenv.config();
 
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

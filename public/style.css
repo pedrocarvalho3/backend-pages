@@ -26,6 +26,12 @@ h1 {
   color: #333;
 }
 
+.title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 form {
   display: flex;
   flex-direction: column;
